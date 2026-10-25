@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aditya Singh — pick a mood</title>
+  <meta name="description" content="Aditya (Adi) Singh, data scientist in Pittsburgh. Drag the mood pad to see the projects and the life that fit how you feel." />
+  <meta name="theme-color" content="#E8EAED" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%2324345E'/%3E%3Cstop offset='1' stop-color='%23F2B300'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='url(%23g)'/%3E%3Ccircle cx='21' cy='11' r='5' fill='%2315171A' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Hanken+Grotesk:ital,wght@0,400..700;1,400..500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="top">
+    <a class="wordmark" href="#main">Adi Singh</a>
+    <nav aria-label="Sections">
+      <a href="#mix">The mix</a>
+      <a href="#work">Work</a>
+      <a href="#path">Path</a>
+      <a href="#contact">Contact</a>
+      <a class="nav-game" href="game/">Play the game <span class="wip-tag">WIP</span></a>
+    </nav>
+    <p class="mood-chip" aria-hidden="true"><span class="chip-dot"></span><span data-mood-name>Upbeat</span></p>
+  </header>
+
+  <main id="main">
+    <!-- Hero: the pad is the demo -->
+    <section class="hero" aria-labelledby="name">
+      <div class="hero-copy">
+        <p class="hello">Hi, I’m</p>
+        <h1 class="name" id="name"><span>Aditya</span> <span>Singh</span></h1>
+        <p class="lede">
+          I study data science at Pitt and build machine-learning and LLM systems end to end. I care as much about how a model is measured as how it’s built.
+        </p>
+        <p class="lede-2">
+          Away from the laptop, I’m watching Barça, hunting down good Korean barbecue, chasing waterfalls or deep in something Star Wars.
+          Music runs through all of it, which is how a playlist idea turned into SonSetu, and how this page got its mood pad.
+        </p>
+        <p class="lede-3">Drag the dot to pick a mood. The colors, the type and the order of everything below will follow.</p>
+        <dl class="facts">
+          <div><dt>Studying</dt><dd>B.S. Data Science, University of Pittsburgh, 2027</dd></div>
+          <div><dt>Published</dt><dd>Two peer-reviewed papers</dd></div>
+          <div><dt>Looking for</dt><dd>New-grad roles in ML, LLM systems and data science</dd></div>
+        </dl>
+      </div>
+
+      <div class="mixer">
+        <div class="pad-wrap">
+          <p class="axis axis-y-top">Hype</p>
+          <p class="axis axis-y-bottom">Calm</p>
+          <p class="axis axis-x-left">Gloomy</p>
+          <p class="axis axis-x-right">Joyful</p>
+          <div class="pad" id="pad" tabindex="0" role="slider"
+               aria-label="Mood pad. Left and right set how positive, up and down set energy."
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="72" aria-valuetext="Upbeat">
+            <canvas id="pad-canvas" width="64" height="64" aria-hidden="true"></canvas>
+            <div class="pad-grid" aria-hidden="true">
+              <span>Tense</span><span>Wired</span><span>Hype</span>
+              <span>Brooding</span><span>Focused</span><span>Upbeat</span>
+              <span>Gloomy</span><span>Mellow</span><span>Chill</span>
+            </div>
+            <div class="pad-dots" id="pad-dots" aria-hidden="true"></div>
+            <div class="dot" id="dot" aria-hidden="true"><span class="dot-hint">Drag me</span></div>
+          </div>
+        </div>
+
+        <div class="readout" aria-live="polite">
+          <p class="r-mood"><span data-mood-name>Upbeat</span></p>
+          <p class="r-nums"><span>Positivity <b id="r-v">0.72</b></span><span>Energy <b id="r-e">0.62</b></span></p>
+          <p class="r-top">Best match: <a href="#mix" id="r-top">—</a></p>
+        </div>
+
+        <div class="presets" role="group" aria-label="Mood presets">
+          <button type="button" data-v="0.55" data-e="0.95">Matchday</button>
+          <button type="button" data-v="0.84" data-e="0.14">Sunday morning</button>
+          <button type="button" data-v="0.22" data-e="0.82">Deadline</button>
+          <button type="button" data-v="0.18" data-e="0.16">3 a.m.</button>
+          <button type="button" data-v="0.92" data-e="0.86">Friday night</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- The mix: life and work, ranked by distance to the dot -->
+    <section class="mix" id="mix" aria-labelledby="mix-title">
+      <div class="sec-intro">
+        <h2 id="mix-title">Everything, sorted by your mood</h2>
+        <p>Each photo and project sits somewhere on the pad. The closest one to your dot comes first.</p>
+        <div class="filters" role="group" aria-label="Filter the mix">
+          <button type="button" class="is-on" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="life" aria-pressed="false">Life</button>
+          <button type="button" data-filter="work" aria-pressed="false">Work</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid">
+        <article class="tile tile-photo" data-kind="life" data-v="0.78" data-e="0.26">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Korean barbecue, then a nap">
+            <img src="img/food.jpg" alt="Adi leaning back after Korean barbecue, a beer on the table" width="1400" height="928" loading="lazy" style="--focus: 60% 40%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Food</p><h3>KBBQ, then a nap</h3><p class="t-line">Shot on film. I’m always looking for the next good place to eat.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.88" data-e="0.78">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: This is the way">
+            <img src="img/mando.jpg" alt="Adi in sunglasses next to a Mandalorian cosplayer" width="905" height="1200" loading="lazy" style="--focus: 50% 24%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Sci-fi</p><h3>This is the way</h3><p class="t-line">A lifelong Star Wars fan, finally standing next to a Mandalorian.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.68" data-e="0.6">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Off the grid">
+            <img src="img/waterfall.jpg" alt="Adi giving a thumbs up on a mossy rock beside a waterfall" width="832" height="1200" loading="lazy" style="--focus: 50% 22%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Outdoors</p><h3>Off the grid</h3><p class="t-line">Trails and waterfalls are how I reset after a long week.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.38" data-e="0.3">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: New York, after dark">
+            <img src="img/nyc.jpg" alt="Adi in front of the lit-up New York skyline at night" width="675" height="1200" loading="lazy" style="--focus: 50% 34%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Cities</p><h3>New York, after dark</h3><p class="t-line">A quiet night with the skyline doing all the talking.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.8" data-e="0.5">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Downtown Pittsburgh">
+            <img src="img/pittsburgh.jpg" alt="Adi flashing a peace sign on a lawn in downtown Pittsburgh" width="1400" height="1050" loading="lazy" style="--focus: 42% 55%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Home base</p><h3>Downtown Pittsburgh</h3><p class="t-line">School, work and most of my side projects happen here.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.64" data-e="0.07">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Graduation day">
+            <img src="img/grad.jpg" alt="Adi slumped on a bench in a suit, holding his graduation cap and diploma" width="933" height="1400" loading="lazy" style="--focus: 45% 50%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Milestone</p><h3>Graduation day</h3><p class="t-line">The ceremony was over, and so was my energy.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.5" data-e="0.52">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Interview mode">
+            <img src="img/suit.jpg" alt="Adi in a navy suit and tie taking a mirror photo" width="999" height="1200" loading="lazy" style="--focus: 38% 30%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Work mode</p><h3>Interview mode</h3><p class="t-line">Tie on, mirror check, ready.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-art" data-kind="life" data-v="0.52" data-e="0.96">
+          <button type="button" class="tile-hit" data-open aria-label="Open illustration: Matchday">
+            <img src="img/art-barca.jpg" alt="Illustration of a football in flight over a pitch, on blue and garnet stripes" width="1152" height="864" loading="lazy" style="--focus: 50% 40%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Football</p><h3>Matchday</h3><p class="t-line">FC Barcelona, win or lose. Més que un club.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-art" data-kind="life" data-v="0.74" data-e="0.7">
+          <button type="button" class="tile-hit" data-open aria-label="Open illustration: Shuffle, unfiltered">
+            <img src="img/art-music.jpg" alt="Illustration of headphones resting on a vinyl record, with shuffle arrows" width="1152" height="864" loading="lazy" style="--focus: 50% 42%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Music</p><h3>Shuffle, unfiltered</h3><p class="t-line">My taste is all over the place. Sorting it by mood is what started SonSetu.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.92" data-e="0.64">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Hail to Pitt">
+            <img src="img/panther.jpg" alt="Adi in a graduation gown giving two thumbs up beside the Pitt Panther statue, the Cathedral of Learning behind" width="1024" height="576" loading="lazy" style="--focus: 52% 50%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Pitt</p><h3>Hail to Pitt</h3><p class="t-line">Cap, gown and two thumbs up, with the Pitt Panther behind me.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.78" data-e="0.42">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Ferry, skyline, good company">
+            <img src="img/ferry.jpg" alt="Adi and a friend in sunglasses on a ferry, the Lower Manhattan skyline behind them" width="1024" height="768" loading="lazy" style="--focus: 74% 38%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Friends</p><h3>Ferry, skyline, good company</h3><p class="t-line">Lower Manhattan from the water, with a friend and the right sunglasses.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.46" data-e="0.76">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: The city, in motion">
+            <img src="img/street.jpg" alt="Adi walking past a blurred black SUV at night on Wanamaker Place in New York" width="768" height="1024" loading="lazy" style="--focus: 28% 48%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Cities</p><h3>The city, in motion</h3><p class="t-line">Wanamaker Place at night, moving faster than the shutter.</p></div>
+        </article>
+
+        <article class="tile tile-photo" data-kind="life" data-v="0.62" data-e="0.4">
+          <button type="button" class="tile-hit" data-open aria-label="Open photo: Office hours, café edition">
+            <img src="img/cafe.jpg" alt="Laptop at a café showing the Mood Reader model deck" width="1200" height="900" loading="lazy" style="--focus: 60% 50%" />
+          </button>
+          <div class="tile-cap"><p class="t-kind">Work mode</p><h3>Office hours, café edition</h3><p class="t-line">Drafting the Mood Reader model deck over coffee.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-work" data-kind="work" data-v="0.82" data-e="0.72">
+          <a class="tile-hit" href="#p-sonsetu" aria-label="SonSetu project details">
+            <img src="img/sonsetu.jpg" alt="SonSetu landing page: A bridge between sounds, with a glowing Mix control" width="1024" height="576" loading="lazy" style="--focus: 24% 50%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">Project · live</p><h3>SonSetu</h3><p class="t-line">Mood-aware playlists with about 100 users. This pad is a cousin of it.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-work" data-kind="work" data-v="0.6" data-e="0.46">
+          <a class="tile-hit" href="#p-loctrack" aria-label="LocTrack project details">
+            <img src="img/loctrack.jpg" alt="LocTrack landing page: Know where everyone is, over a night-time globe" width="1024" height="834" loading="lazy" style="--focus: 30% 45%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">Project</p><h3>LocTrack</h3><p class="t-line">Live location through a private link, on a 3D globe. No app needed.</p></div>
+        </article>
+
+        <article class="tile tile-type tile-work" data-kind="work" data-v="0.3" data-e="0.86">
+          <a class="tile-hit" href="#p-pulsex" aria-label="PulseX project details"></a>
+          <svg class="type-art chart" viewBox="0 0 200 80" aria-hidden="true"><polyline points="0,60 18,52 30,58 44,40 58,46 72,28 86,36 100,22 114,34 128,18 142,30 156,14 170,26 184,10 200,18" /></svg>
+          <div class="tile-cap"><p class="t-kind">Project</p><h3>PulseX</h3><p class="t-line">Six LLM agents vote on market direction. About 56% out of sample.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-work" data-kind="work" data-v="0.26" data-e="0.36">
+          <a class="tile-hit" href="#p-sers" aria-label="SERS classifier project details">
+            <img src="img/sers.jpg" alt="The COVID-19 strain prediction app showing an uploaded Raman spectrum" width="1024" height="554" loading="lazy" style="--focus: 50% 60%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">Research</p><h3>SERS variant classifier</h3><p class="t-line">Raman spectra in, SARS-CoV-2 variant out. <i>ACS Omega</i>, 2025.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-art tile-work" data-kind="work" data-v="0.42" data-e="0.62">
+          <a class="tile-hit" href="#p-ats" aria-label="Resume ATS Scorer project details">
+            <img src="img/art-ats.jpg" alt="Illustration of a resume being scanned between two curly braces, beside a score gauge" width="1152" height="864" loading="lazy" style="--focus: 50% 45%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">Project</p><h3>Resume ATS Scorer</h3><p class="t-line">Claude, prompted for strict JSON, with a client that forgives.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-art tile-work" data-kind="work" data-v="0.58" data-e="0.32">
+          <a class="tile-hit" href="#p-airbnb" aria-label="Airbnb price model details">
+            <img src="img/art-airbnb.jpg" alt="Illustration of houses on a map grid on both banks of a winding river" width="1152" height="864" loading="lazy" style="--focus: 50% 45%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">Capstone</p><h3>Airbnb price model</h3><p class="t-line">Twin Cities listings, priced on a log scale. Cross-validated RMSE.</p></div>
+        </article>
+
+        <article class="tile tile-photo tile-art tile-work" data-kind="work" data-v="0.46" data-e="0.18">
+          <a class="tile-hit" href="#path" aria-label="Textile ECG research, see the path section">
+            <img src="img/art-ecg.jpg" alt="Illustration of a woven fabric swatch stitched with a silver ECG heartbeat line" width="1152" height="864" loading="lazy" style="--focus: 50% 42%" />
+          </a>
+          <div class="tile-cap"><p class="t-kind">First paper</p><h3>Textile ECG electrodes</h3><p class="t-line">My first research summer at IIT Delhi. <i>Materials Today: Proceedings</i>, 2022.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Work: proof rows for recruiters -->
+    <section class="work" id="work" aria-labelledby="work-title">
+      <div class="sec-intro">
+        <h2 id="work-title">The work, in detail</h2>
+        <p>For anyone hiring: what I built, what it measured, and what I learned when it broke.</p>
+      </div>
+
+      <article class="row" id="p-sonsetu" data-v="0.82" data-e="0.72">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>SonSetu Mood Reader</h3>
+          <p class="row-lede">Co-founded. Collaborative playlists powered by mood, live on the web.</p>
+          <p>When Spotify deprecated its audio-features API, I built a 4,000-song lyrics-and-audio dataset from scratch. A gradient-boosting pipeline predicts continuous valence and energy plus an eight-class vibe label, and the inference service runs in production on Render.</p>
+          <p class="stack">DistilRoBERTa · librosa · VADER · scikit-learn · Render</p>
+          <a class="go" href="https://sonsetu.onrender.com/" target="_blank" rel="noopener">Open the live site</a>
+          <figure class="row-shot">
+            <img src="img/sonsetu.jpg" alt="SonSetu landing page: A bridge between sounds, with a glowing Mix control" width="1024" height="576" loading="lazy" />
+            <figcaption>sonsetu.onrender.com, live</figcaption>
+          </figure>
+        </div>
+        <div class="row-metric"><p class="m">~100</p><p class="m-cap">users on the live site</p></div>
+      </article>
+
+      <article class="row" id="p-pulsex" data-v="0.3" data-e="0.86">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>PulseX</h3>
+          <p class="row-lede">A multi-agent LLM research system for market direction.</p>
+          <p>Six agents on a hand-rolled Python orchestration layer, with no LangChain or LangGraph: planner and executor roles, explicit state passing and weighted voting over FinBERT news sentiment and technical indicators. An early backtest looked great until I traced it to a base-rate false positive, so I rebuilt the evaluation to keep that failure from coming back.</p>
+          <p class="stack">Python · FinBERT · Finnhub API · custom orchestration</p>
+          <a class="go" href="https://github.com/MayhemGOAT/PulseX" target="_blank" rel="noopener">Source on GitHub</a>
+          <figure class="row-shot row-shot-narrow">
+            <img src="img/pulsex.jpg" alt="PulseX README showing the daily trader routine and portfolio setup commands" width="644" height="576" loading="lazy" />
+            <figcaption>The daily routine, straight from the README</figcaption>
+          </figure>
+        </div>
+        <div class="row-metric"><p class="m">~56%</p><p class="m-cap">directional accuracy, out of sample</p></div>
+      </article>
+
+      <article class="row" id="p-sers" data-v="0.26" data-e="0.36">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>SARS-CoV-2 variant classifier</h3>
+          <p class="row-lede">Research at IIT Delhi, turned into a tool a lab could use.</p>
+          <p>I built the data pipeline for an ML-enhanced SERS spectroscopy study on variant detection, then shipped the trained classifier as a Streamlit app for researchers who don’t write code. I’m 4th of 9 authors on the resulting paper.</p>
+          <p class="stack">Python · scikit-learn · Streamlit</p>
+          <a class="go" href="https://github.com/MayhemGOAT/COVID-19_Strain_Analysis_Prediction" target="_blank" rel="noopener">Source on GitHub</a>
+          <figure class="row-shot">
+            <img src="img/sers.jpg" alt="Streamlit app: upload a Raman spectrum file, see the plotted spectrum, then predict the COVID strain" width="1024" height="554" loading="lazy" />
+            <figcaption>The Streamlit app: upload a spectrum, then predict the strain</figcaption>
+          </figure>
+        </div>
+        <div class="row-metric"><p class="m">2025</p><p class="m-cap">published in <i>ACS Omega</i></p></div>
+      </article>
+
+      <article class="row" id="p-ats" data-v="0.42" data-e="0.62">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>Resume ATS Scorer</h3>
+          <p class="row-lede">A browser app that scores a document against a job description and rewrites it.</p>
+          <p>Claude is prompted for strictly parseable JSON, and the client handles the malformed responses that still slip through, so the interface never breaks on a bad generation.</p>
+          <p class="stack">React · Anthropic Claude API · structured output</p>
+        </div>
+        <div class="row-metric"><p class="m">JSON</p><p class="m-cap">strict schema, tolerant parser</p></div>
+      </article>
+
+      <article class="row" id="p-airbnb" data-v="0.58" data-e="0.32">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>Airbnb price prediction</h3>
+          <p class="row-lede">Capstone project on the Minneapolis–Saint Paul market.</p>
+          <p>A log-transformed price target and a Random Forest regressor, tuned through feature engineering and a hyperparameter search.</p>
+          <p class="stack">scikit-learn · Random Forest · cross-validation</p>
+        </div>
+        <div class="row-metric"><p class="m">0.409</p><p class="m-cap">cross-validated RMSE, log price</p></div>
+      </article>
+
+      <article class="row" id="p-loctrack" data-v="0.6" data-e="0.46">
+        <div class="row-pad" aria-hidden="true"><i></i></div>
+        <div class="row-main">
+          <h3>LocTrack</h3>
+          <p class="row-lede">Real-time location sharing through a private link, with no app to install.</p>
+          <p>Create a session, send the link by text, WhatsApp or email, and the other person’s live location appears on your personal 3D globe. Geofence alerts flag arrivals, and location data isn’t stored once the session ends.</p>
+          <p class="stack">React · Three.js · FastAPI</p>
+          <a class="go" href="https://github.com/MayhemGOAT/loc_track" target="_blank" rel="noopener">Source on GitHub</a>
+          <figure class="row-shot">
+            <img src="img/loctrack.jpg" alt="LocTrack landing page: Know where everyone is, over a night-time globe" width="1024" height="834" loading="lazy" />
+            <figcaption>The share-link flow, over a night-side globe</figcaption>
+          </figure>
+        </div>
+        <div class="row-metric"><p class="m">0</p><p class="m-cap">apps the other person has to install</p></div>
+      </article>
+
+      <p class="more">More builds are on <a href="https://github.com/MayhemGOAT" target="_blank" rel="noopener">GitHub</a>. Or explore these projects as islands in <a href="game/">Field, a 3D game</a> <span class="wip-tag">Work in progress</span></p>
+    </section>
+
+    <!-- Path: real chronology -->
+    <section class="path" id="path" aria-labelledby="path-title">
+      <div class="sec-intro">
+        <h2 id="path-title">How I got here</h2>
+        <p>Research labs, a live-events crew and an AI internship. Each stop taught me something I still use.</p>
+      </div>
+      <ol class="timeline">
+        <li><p class="when">2022</p><div><h3>IIT Delhi · Research intern</h3><p>My first lab. Most of research turned out to be careful, unglamorous data work, and I loved it anyway. The summer ended with my first paper, on textile-based ECG electrodes, in <i>Materials Today: Proceedings</i>.</p></div></li>
+        <li><p class="when">2023</p><div><h3>University of Georgia · Research intern</h3><p>Collecting, cleaning and exploring data for a faculty-led project. This is where I got comfortable with messy, real-world data.</p></div></li>
+        <li><p class="when">2024</p><div><h3>IIT Delhi · Research intern</h3><p>I went back to build the data pipeline for a SERS spectroscopy study on SARS-CoV-2 variants, then wrapped the classifier in a Streamlit app so researchers who don’t code could use it. The work was published in <i>ACS Omega</i>.</p></div></li>
+        <li><p class="when">2025</p><div><h3>Dyashin Technosoft · AI engineering intern</h3><p>My first time shipping LLM features into real workflows, from prompts and output schemas to backend and interface. Most of the job was making the model’s output reliable enough to build on.</p></div></li>
+        <li><p class="when">2025–26</p><div><h3>University of Pittsburgh · Audio-visual technician</h3><p>Sound, video and live streams for four concerts and thirty to forty campus events. A live show doesn’t pause while you debug, so I learned to stay calm and fix things in real time.</p></div></li>
+        <li><p class="when">2027</p><div><h3>University of Pittsburgh · B.S. Data Science</h3><p>Finishing my degree with a minor in Applied Statistics, focused on statistical machine learning, regression, mathematical statistics and optimization.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- Contact: the mood color, full bleed -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Say hi, in whatever mood</h2>
+      <a class="email" href="mailto:jpsanuadi@gmail.com">jpsanuadi@gmail.com</a>
+      <div class="contact-actions">
+        <button type="button" class="btn" id="copy" data-email="jpsanuadi@gmail.com">Copy email</button>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/aditya-singh3441" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/MayhemGOAT" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="contact-note">Open to 2027 new-grad roles in ML, LLM systems and data science. U.S. citizen, based in Pittsburgh, happy to relocate.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>© 2026 Aditya Singh</p>
+    <p><a href="game/">Field, the 3D game</a> <span class="wip-tag">Work in progress</span></p>
+    <p>Set in Anybody and Hanken Grotesk. The colors are whatever you made them.</p>
+  </footer>
+
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+    <form method="dialog"><button class="viewer-close" aria-label="Close">×</button></form>
+    <img id="viewer-img" alt="" />
+    <div class="viewer-cap"><p class="t-kind" id="viewer-kind"></p><h3 id="viewer-title"></h3><p id="viewer-line"></p></div>
+  </dialog>
+
+  <script src="app.js?v=8" defer></script>
+</body>
+</html>

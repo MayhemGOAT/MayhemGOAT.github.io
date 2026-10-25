@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Aditya Singh — Field, a work-in-progress 3D game. Jump between project islands." />
+  <title>Field (work in progress) · Aditya Singh</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="field.css" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="game" aria-label="Field game canvas"></canvas>
+
+  <div class="hud">
+    <div class="top-bar">
+      <div class="brand-chip">
+        <span class="dot" aria-hidden="true"></span>
+        <span>FIELD · PROJECT JUMPER</span>
+        <span class="wip">Work in progress</span>
+      </div>
+      <div class="top-links">
+        <a href="../">← Back to portfolio</a>
+      </div>
+    </div>
+
+    <p class="hint" id="hint">
+      <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move · <kbd>Space</kbd> jump · land on islands for stories
+    </p>
+
+    <aside class="story" id="story" aria-live="polite" hidden>
+      <p class="story-tags" id="story-tags"></p>
+      <h2 id="story-title"></h2>
+      <p class="story-body" id="story-body"></p>
+      <div class="story-stack" id="story-stack"></div>
+      <div class="story-actions">
+        <a class="story-link" id="story-link" href="#" target="_blank" rel="noopener">Open →</a>
+        <button type="button" class="story-close" id="story-close">Close</button>
+      </div>
+    </aside>
+
+    <div class="portrait" aria-hidden="true">
+      <img src="hud-portrait.jpg" alt="" width="48" height="56" />
+      <div class="portrait-meta">
+        <strong>Aditya Singh</strong>
+        Voxel field agent
+      </div>
+    </div>
+
+    <div class="mobile-pad" aria-label="Touch controls">
+      <div class="pad">
+        <button type="button" class="up" data-key="KeyW" aria-label="Forward">▲</button>
+        <button type="button" class="left" data-key="KeyA" aria-label="Left">◀</button>
+        <button type="button" class="down" data-key="KeyS" aria-label="Back">▼</button>
+        <button type="button" class="right" data-key="KeyD" aria-label="Right">▶</button>
+      </div>
+      <button type="button" class="jump-btn" data-key="Space" aria-label="Jump">Jump</button>
+    </div>
+  </div>
+
+  <script type="module" src="field.js"></script>
+</body>
+</html>
